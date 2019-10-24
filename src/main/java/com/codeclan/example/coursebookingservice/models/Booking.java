@@ -17,27 +17,20 @@ public class Booking {
     @Column(name = "date")
     private String date;
 
-    @JsonIgnoreProperties(value = "bookings")
-    @ManyToMany
-    @JoinTable(
-            name = "customers_bookings",
-            joinColumns = {
-                    @JoinColumn(
-                            name = "booking_id",
-                            nullable = false,
-                            updatable = false)
-            },
-            inverseJoinColumns = { @JoinColumn(
-                            name = "customer_id",
-                            nullable = false,
-                            updatable = false)
-            }
-    )
-    private List<Customer> customers;
+    @ManyToOne
+    @JsonIgnoreProperties("course")
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
-    public Booking(String date, List<Customer> customers) {
+    @ManyToOne
+    @JsonIgnoreProperties("customer")
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
+    public Booking(String date, Course course, Customer customer) {
         this.date = date;
-        this.customers = new ArrayList<>();
+        this.customer = customer;
+        this.course = course;
     }
 
     public Booking() {
@@ -59,15 +52,11 @@ public class Booking {
         this.date = date;
     }
 
-    public List<Customer> getCustomers() {
-        return customers;
+    public Customer getCustomers() {
+        return customer;
     }
 
-    public void setCustomers(List<Customer> customers) {
-        this.customers = customers;
-    }
-
-    public void addCustomer(Customer customer) {
-        this.customers.add(customer);
+    public void setCustomers(Customer customer) {
+        this.customer = customer;
     }
 }
